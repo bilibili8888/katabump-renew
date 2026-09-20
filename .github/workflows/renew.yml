@@ -42,7 +42,18 @@ jobs:
       run: |
         xvfb-run --auto-servernum --server-args="-screen 0 1920x1080x24" \
           python3 app.py
-        
+          
+    # 添加自动续命步骤
+    - name: ❤️ Keepalive Workflow
+      if: always()
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+
+        git commit --allow-empty -m "Chore: Keep-alive [skip ci]"
+
+        git push origin HEAD:${GITHUB_REF_NAME} || echo "No changes to push"
+
     - name: 🧹 清理旧的工作流运行记录
       if: always()
       env:
